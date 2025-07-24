@@ -1,0 +1,47 @@
+#include <Servo.h>
+
+// Define pin numbers for IR sensors and servo
+const int irSensor1Pin = 2; // Replace with your actual pin numbers
+const int irSensor2Pin = 3;
+const int servoMotorPin = 9; // Replace with your actual pin number
+
+Servo servoMotor;
+
+void setup() {
+  // Initialize IR sensors as inputs
+  pinMode(irSensor1Pin, INPUT);
+  pinMode(irSensor2Pin, INPUT);
+
+  // Attach servo motor to its pin
+  servoMotor.attach(servoMotorPin);
+}
+void loop() {
+  // Read the status of IR sensors
+  int sensor1Status = digitalRead(irSensor1Pin);
+  int sensor2Status = digitalRead(irSensor2Pin);
+
+  if (sensor1Status == LOW && sensor2Status == LOW) {
+    // Both sensors detect a car, parking is full
+    // Implement your parking full logic here
+    // For example, display a message or activate an alarm
+  } else if (sensor1Status == LOW && sensor2Status == HIGH) {
+    // Only sensor2 detects a car, parking spot is available
+    // Open the servo gate
+    servoMotor.write(90); // Adjust the angle as needed
+    delay(5000); // Keep the gate open for 5 seconds (adjust as needed)
+    servoMotor.write(0); // Close the gate
+  } else if (sensor1Status == HIGH && sensor2Status == LOW) {
+    // Only sensor1 detects a car, parking spot is available
+    // Open the servo gate
+    servoMotor.write(90); // Adjust the angle as needed
+    delay(5000); // Keep the gate open for 5 seconds (adjust as needed)
+    servoMotor.write(0); // Close the gate
+  } else {
+    // Both sensors are HIGH, parking spot is empty
+    // Implement your empty parking spot logic here
+    // For example, display a message or turn off an indicator
+  }
+
+  // Add some delay between readings to avoid false readings
+  delay(1000); // Adjust as needed
+}
